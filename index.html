@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Run Log — My Running Journey</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style/style.css" />
+  </head>
+  <body>
+    <!-- Bubble stream layer (semangat messages floating up) -->
+    <div id="bubbleLane" class="bubble-lane" aria-hidden="true"></div>
+
+    <div class="phone-shell">
+      <!-- HEADER -->
+      <header class="header">
+        <div class="lane-lines" aria-hidden="true"></div>
+        <div class="header-top">
+          <div class="profile">
+            <img
+              id="profilePhoto"
+              class="profile-photo"
+              src="https://api.dicebear.com/7.x/notionists/svg?seed=Runner"
+              alt="Foto profil"
+            />
+            <div class="profile-text">
+              <p class="greeting" id="greeting">Selamat pagi</p>
+              <h1 class="profile-name" id="profileName">Runner</h1>
+              <p class="profile-bio" id="profileBio">
+                Mengejar PR, satu langkah di satu waktu 🏃
+              </p>
+            </div>
+          </div>
+          <div class="bib" id="bibDate">
+            <span class="bib-label">HARI INI</span>
+            <span class="bib-date" id="todayDate">—</span>
+          </div>
+        </div>
+
+        <div class="progress-row">
+          <div class="progress-track">
+            <div
+              class="progress-fill"
+              id="progressFill"
+              style="width: 0%"
+            ></div>
+          </div>
+          <span class="progress-label" id="progressLabel">0 / 0 selesai</span>
+        </div>
+      </header>
+
+      <!-- TODO PANEL -->
+      <main class="panel">
+        <div class="panel-heading">
+          <span class="panel-title">RUNNING EVENT LIST</span>
+          <button class="refresh-btn" id="refreshBtn" title="Muat ulang">
+            ⟳
+          </button>
+        </div>
+
+        <div id="listState" class="list-state">Memuat data…</div>
+
+        <ul class="todo-list" id="todoList" hidden></ul>
+      </main>
+    </div>
+
+    <!-- FLOATING ACTION BUTTON -->
+    <button class="fab" id="fabBtn">
+      <span class="fab-icon">💛</span>
+      <span class="fab-text">Berikan Semangat!</span>
+    </button>
+
+    <!-- MODAL -->
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal-card">
+        <button class="modal-close" id="modalClose" aria-label="Tutup">
+          ✕
+        </button>
+        <h2 class="modal-title">Berikan Semangat 💪</h2>
+        <p class="modal-sub">
+          Dukungan kecilmu bisa jadi tenaga tambahan buat larinya!
+        </p>
+
+        <form id="semangatForm">
+          <label class="field-label" for="nameInput">Nama (opsional)</label>
+          <input
+            type="text"
+            id="nameInput"
+            class="field-input"
+            placeholder="@anonim"
+            maxlength="40"
+          />
+
+          <label class="field-label" for="msgInput">Pesan semangat</label>
+          <textarea
+            id="msgInput"
+            class="field-textarea"
+            placeholder="Semangat terus larinya! 🔥"
+            maxlength="200"
+            required
+          ></textarea>
+          <div class="char-counter"><span id="charCount">0</span>/200</div>
+
+          <button type="submit" class="submit-btn" id="submitBtn">
+            Kirim Semangat
+          </button>
+          <p class="form-status" id="formStatus"></p>
+        </form>
+      </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/script.js"></script>
+  </body>
+</html>
