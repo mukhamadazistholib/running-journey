@@ -103,12 +103,11 @@
       return value;
     }
 
-    return new Intl.DateTimeFormat("id-ID", {
+    return new Intl.DateTimeFormat("en-GB", {
       weekday: "long",
       day: "numeric",
       month: "long",
       year: "numeric",
-      timeZone: "Asia/Jakarta",
     }).format(date);
   }
 
