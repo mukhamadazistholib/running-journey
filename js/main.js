@@ -225,7 +225,7 @@
     const name = els.nameInput.value.trim() || "@anonim";
 
     els.submitBtn.disabled = true;
-    els.submitBtn.textContent = "Mengirim…";
+    els.submitBtn.textContent = "Sending..";
     els.formStatus.textContent = "";
     els.formStatus.className = "form-status";
 
@@ -239,7 +239,8 @@
           headers: { "Content-Type": "text/plain;charset=utf-8" },
           body: JSON.stringify(payload),
         });
-        if (!res.ok) throw new Error("Gagal mengirim (" + res.status + ")");
+        if (!res.ok)
+          throw new Error("Whoops, something went wrong (" + res.status + ")");
       } else {
         MOCK_DATA.semangat.push(payload); // mode demo lokal
       }
@@ -248,18 +249,19 @@
       cheeringQueue.push(payload);
       spawnBubble(payload);
 
-      els.formStatus.textContent = "Terkirim! Terima kasih semangatnya 🎉";
+      els.formStatus.textContent =
+        "Yay, it’s sent! Thanks for cheering them on 💛";
       els.formStatus.classList.add("ok");
       els.semangatForm.reset();
       els.charCount.textContent = "0";
       setTimeout(closeModal, 1200);
     } catch (err) {
       console.error(err);
-      els.formStatus.textContent = "Gagal mengirim. Coba lagi ya.";
+      els.formStatus.textContent = "Oops, that didn’t go through. Try again?";
       els.formStatus.classList.add("err");
     } finally {
       els.submitBtn.disabled = false;
-      els.submitBtn.textContent = "Kirim Semangat";
+      els.submitBtn.textContent = "Send a Cheer 🙌";
     }
   });
 
