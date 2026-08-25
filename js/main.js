@@ -190,7 +190,7 @@
     bubble.style.animationDuration = duration + "s";
 
     bubble.innerHTML = `
-      <span class="bubble-name">${escapeHtml(item.name || "@anonim")}</span>
+      <span class="bubble-name">${escapeHtml(item.name || "Anonym")}</span>
       <span class="bubble-msg">${escapeHtml(item.message || "")}</span>
     `;
 
@@ -222,7 +222,7 @@
     e.preventDefault();
     const message = els.msgInput.value.trim();
     if (!message) return;
-    const name = els.nameInput.value.trim() || "@anonim";
+    const name = els.nameInput.value.trim() || "Anonym";
 
     els.submitBtn.disabled = true;
     els.submitBtn.textContent = "Sending..";

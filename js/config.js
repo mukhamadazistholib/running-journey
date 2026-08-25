@@ -85,7 +85,7 @@ const MOCK_DATA = {
   ],
   semangat: [
     { name: "Dinda", message: "Semangat lari nya kak! 🔥" },
-    { name: "@anonim", message: "Sedikit lagi finish line, gaskeun!" },
+    { name: "Anonym", message: "Sedikit lagi finish line, gaskeun!" },
     { name: "Bagas", message: "PR minggu ini pasti pecah 💪" },
   ],
 };
