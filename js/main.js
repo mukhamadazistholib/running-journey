@@ -24,7 +24,7 @@
     bubbleLane: document.getElementById("bubbleLane"),
   };
 
-  let semangatQueue = [];
+  let cheeringQueue = [];
   let bubbleTimer = null;
 
   /* ---------------- Profile & date ---------------- */
@@ -32,23 +32,39 @@
     const hour = new Date().getHours();
     els.greeting.textContent =
       hour < 11
-        ? "Selamat pagi"
+        ? "Morning 🌤️"
         : hour < 15
-          ? "Selamat siang"
+          ? "Afternoon ☀️"
           : hour < 18
-            ? "Selamat sore"
-            : "Selamat malam";
+            ? "Evening 🌥️"
+            : "Evening 🌙";
 
     els.profileName.textContent = CONFIG.PROFILE.name;
     els.profileBio.textContent = CONFIG.PROFILE.bio;
     if (CONFIG.PROFILE.photo) els.profilePhoto.src = CONFIG.PROFILE.photo;
 
-    const today = new Date();
-    els.todayDate.textContent = today.toLocaleDateString("id-ID", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    });
+    function updateDateTime() {
+      const now = new Date();
+
+      const date = now.toLocaleDateString("en-GB", {
+        weekday: "long",
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      });
+
+      const time = [
+        String(now.getHours()).padStart(2, "0"),
+        String(now.getMinutes()).padStart(2, "0"),
+        String(now.getSeconds()).padStart(2, "0"),
+      ].join(":");
+
+      els.todayDate.textContent = `${date}, ${time}`;
+    }
+
+    updateDateTime();
+
+    setInterval(updateDateTime, 1000);
   }
 
   /* ---------------- Data fetching ---------------- */
@@ -57,13 +73,13 @@
       return MOCK_DATA;
     }
     const res = await fetch(CONFIG.ENDPOINT_URL, { method: "GET" });
-    if (!res.ok) throw new Error("Gagal mengambil data (" + res.status + ")");
+    if (!res.ok) throw new Error("Failed to fetch data (" + res.status + ")");
     return res.json();
   }
 
   async function loadAll() {
     els.listState.hidden = false;
-    els.listState.textContent = "Memuat data…";
+    els.listState.textContent = "Loading..";
     els.todoList.hidden = true;
 
     try {
@@ -72,12 +88,30 @@
       startBubbleStream(data.semangat || []);
     } catch (err) {
       els.listState.textContent =
-        "Gagal memuat data. Coba tekan ⟳ untuk muat ulang.";
+        "Failed to fetch the data. Try to refresh ⟳ for try again.";
       console.error(err);
     }
   }
 
   /* ---------------- Todo rendering ---------------- */
+  function formatTodoDate(value) {
+    if (!value) return "";
+
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+      return value;
+    }
+
+    return new Intl.DateTimeFormat("id-ID", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      timeZone: "Asia/Jakarta",
+    }).format(date);
+  }
+
   function renderTodos(events) {
     if (!events.length) {
       els.listState.hidden = false;
@@ -96,7 +130,7 @@
     events.forEach((ev) => {
       const status = String(ev.status || "pending").toLowerCase();
       const isDone =
-        status === "done" || status === "true" || status === "selesai";
+        status === "done" || status === "true" || status === "Done";
       const isActive =
         status === "active" || status === "ongoing" || status === "berjalan";
       if (isDone) doneCount++;
@@ -113,7 +147,7 @@
         <div class="todo-body">
           <p class="todo-title">${escapeHtml(ev.title || "Tanpa judul")}</p>
           <p class="todo-desc">${escapeHtml(ev.description || "")}</p>
-          ${ev.time ? `<p class="todo-time">${escapeHtml(ev.time)}</p>` : ""}
+          ${ev.time ? `<p class="todo-time">${escapeHtml(formatTodoDate(ev.time))}</p>` : ""}
         </div>
         <div class="todo-check">${isDone ? "✓" : ""}</div>
       `;
@@ -123,21 +157,21 @@
     const total = events.length;
     const pct = total ? Math.round((doneCount / total) * 100) : 0;
     els.progressFill.style.width = pct + "%";
-    els.progressLabel.textContent = `${doneCount} / ${total} selesai`;
+    els.progressLabel.textContent = `${doneCount} / ${total} Done`;
   }
 
   /* ---------------- Bubble stream (semangat) ---------------- */
   function startBubbleStream(semangatList) {
-    semangatQueue = (semangatList || []).slice(-40); // batasi biar ga kebanyakan
+    cheeringQueue = (semangatList || []).slice(-40); // batasi biar ga kebanyakan
     if (bubbleTimer) clearInterval(bubbleTimer);
-    if (!semangatQueue.length) return;
+    if (!cheeringQueue.length) return;
 
     let i = 0;
-    spawnBubble(semangatQueue[i % semangatQueue.length]);
+    spawnBubble(cheeringQueue[i % cheeringQueue.length]);
     i++;
 
     bubbleTimer = setInterval(() => {
-      spawnBubble(semangatQueue[i % semangatQueue.length]);
+      spawnBubble(cheeringQueue[i % cheeringQueue.length]);
       i++;
     }, CONFIG.BUBBLE_INTERVAL_MS || 3500);
   }
@@ -212,7 +246,7 @@
       }
 
       // langsung munculkan bubble tanpa nunggu refetch
-      semangatQueue.push(payload);
+      cheeringQueue.push(payload);
       spawnBubble(payload);
 
       els.formStatus.textContent = "Terkirim! Terima kasih semangatnya 🎉";

@@ -19,7 +19,6 @@
     <div class="phone-shell">
       <!-- HEADER -->
       <header class="header">
-        <div class="lane-lines" aria-hidden="true"></div>
         <div class="header-top">
           <div class="profile">
             <img
@@ -31,13 +30,13 @@
             <div class="profile-text">
               <p class="greeting" id="greeting">Selamat pagi</p>
               <h1 class="profile-name" id="profileName">Runner</h1>
-              <p class="profile-bio" id="profileBio">
-                Mengejar PR, satu langkah di satu waktu 🏃
-              </p>
+              <div class="profile-bio">
+                <span class="profile-bio-text" id="profileBio"></span>
+              </div>
             </div>
           </div>
           <div class="bib" id="bibDate">
-            <span class="bib-label">HARI INI</span>
+            <span class="bib-label">Today</span>
             <span class="bib-date" id="todayDate">—</span>
           </div>
         </div>
@@ -50,7 +49,7 @@
               style="width: 0%"
             ></div>
           </div>
-          <span class="progress-label" id="progressLabel">0 / 0 selesai</span>
+          <span class="progress-label" id="progressLabel">0 / 0 Done</span>
         </div>
       </header>
 
@@ -62,9 +61,7 @@
             ⟳
           </button>
         </div>
-
-        <div id="listState" class="list-state">Memuat data…</div>
-
+        <div id="listState" class="list-state">Loading..</div>
         <ul class="todo-list" id="todoList" hidden></ul>
       </main>
     </div>
@@ -72,42 +69,43 @@
     <!-- FLOATING ACTION BUTTON -->
     <button class="fab" id="fabBtn">
       <span class="fab-icon">💛</span>
-      <span class="fab-text">Berikan Semangat!</span>
+      <span class="fab-text">Kind of Words!</span>
     </button>
 
     <!-- MODAL -->
     <div class="modal-overlay" id="modalOverlay">
       <div class="modal-card">
-        <button class="modal-close" id="modalClose" aria-label="Tutup">
+        <button class="modal-close" id="modalClose" aria-label="Close">
           ✕
         </button>
-        <h2 class="modal-title">Berikan Semangat 💪</h2>
+        <h2 class="modal-title">Cheer Them On 💛</h2>
         <p class="modal-sub">
-          Dukungan kecilmu bisa jadi tenaga tambahan buat larinya!
+          A few kind words can make every step feel a little lighter.
         </p>
-
         <form id="semangatForm">
-          <label class="field-label" for="nameInput">Nama (opsional)</label>
+          <label class="field-label" for="nameInput">
+            Your Name (optional)
+          </label>
           <input
             type="text"
             id="nameInput"
             class="field-input"
-            placeholder="@anonim"
+            placeholder="@anonymous"
             maxlength="40"
           />
-
-          <label class="field-label" for="msgInput">Pesan semangat</label>
+          <label class="field-label" for="msgInput">
+            Leave a Little Encouragement
+          </label>
           <textarea
             id="msgInput"
             class="field-textarea"
-            placeholder="Semangat terus larinya! 🔥"
+            placeholder="You've got this! Keep going, one step at a time. 🔥"
             maxlength="200"
             required
           ></textarea>
           <div class="char-counter"><span id="charCount">0</span>/200</div>
-
           <button type="submit" class="submit-btn" id="submitBtn">
-            Kirim Semangat
+            Send Some Love 💛
           </button>
           <p class="form-status" id="formStatus"></p>
         </form>
@@ -115,6 +113,6 @@
     </div>
 
     <script src="js/config.js"></script>
-    <script src="js/script.js"></script>
+    <script src="js/main.js"></script>
   </body>
 </html>

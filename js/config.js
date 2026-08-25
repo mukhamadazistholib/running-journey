@@ -13,8 +13,8 @@ const CONFIG = {
     "https://script.google.com/macros/s/AKfycbwTqH6M7fKVECGZpLGGb2VNnoG5B8dS6CLRRq4qU4aGsOh-14NkouUFWHIWqjFh8x0Lnw/exec",
 
   PROFILE: {
-    name: "Pathum",
-    bio: "Mengejar PR, satu langkah di satu waktu 🏃",
+    name: "Human",
+    bio: "Becoming a little better than yesterday. 🌱",
     photo: "https://api.dicebear.com/7.x/notionists/svg?seed=Pathum",
   },
 

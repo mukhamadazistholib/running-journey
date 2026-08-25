@@ -124,12 +124,34 @@ body {
 
 .profile-bio {
   margin: 0;
-  font-size: 12.5px;
-  opacity: 0.85;
+  width: 220px;
   max-width: 220px;
   overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
+  font-size: 12.5px;
+  opacity: 0.85;
+}
+
+.profile-bio-text {
+  display: inline-block;
+  width: max-content;
+  white-space: nowrap;
+  animation: profileBioMarquee 12s linear infinite;
+}
+
+@keyframes profileBioMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  70% {
+    transform: translateX(-100%);
+  }
+  70.01% {
+    transform: translateX(220px);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
 
 .bib {
@@ -152,7 +174,7 @@ body {
 .bib-date {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 13px;
+  font-size: 10px;
   margin-top: 2px;
 }
 
@@ -220,7 +242,8 @@ body {
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  font-size: 15px;
+  font-size: 20px;
+  font-weight: 500;
   cursor: pointer;
   transition: transform 0.3s ease;
 }
@@ -242,6 +265,11 @@ body {
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+.list-state[hidden],
+.todo-list[hidden] {
+  display: none !important;
 }
 
 .todo-item {
@@ -347,11 +375,10 @@ body {
   position: fixed;
   bottom: 22px;
   left: 50%;
-  transform: translateX(calc(-50% + 0px));
-  margin-left: auto;
-  right: auto;
+  transform: translateX(-50%);
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   background: linear-gradient(120deg, var(--coral), #ff8e6e);
   color: #fff;
@@ -364,15 +391,8 @@ body {
   box-shadow: 0 10px 26px rgba(255, 107, 107, 0.4);
   cursor: pointer;
   z-index: 40;
-  max-width: 430px;
-}
-
-@media (min-width: 431px) {
-  .fab {
-    left: auto;
-    right: calc(50% - 215px + 22px);
-    transform: none;
-  }
+  width: max-content;
+  max-width: calc(100vw - 44px);
 }
 
 .fab-icon {
