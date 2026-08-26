@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Manage Events — Run Log</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/style/style.css" />
+    <link rel="stylesheet" href="/style/admin/admin.css" />
+  </head>
+  <body>
+    <!-- LOGIN GATE -->
+    <div class="phone-shell" id="loginView">
+      <header class="header">
+        <div class="header-top">
+          <div class="profile-text">
+            <p class="greeting">Restricted area</p>
+            <h1 class="profile-name">Manage Events</h1>
+            <p class="profile-bio-plain">
+              Log in to manage the running event list
+            </p>
+          </div>
+        </div>
+      </header>
+
+      <main class="panel">
+        <div class="admin-login-card">
+          <label class="field-label" for="pwInput">Admin password</label>
+          <form id="loginForm">
+            <input
+              type="password"
+              id="pwInput"
+              class="field-input"
+              placeholder="••••••••"
+              required
+              autofocus
+            />
+            <button type="submit" class="submit-btn" id="loginBtn">
+              Log in
+            </button>
+            <p class="form-status" id="loginStatus"></p>
+          </form>
+        </div>
+      </main>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="phone-shell" id="dashView" hidden>
+      <header class="header">
+        <div class="header-top">
+          <div class="profile-text">
+            <p class="greeting">Manage</p>
+            <h1 class="profile-name">Running Events</h1>
+          </div>
+          <button
+            class="refresh-btn admin-header-btn"
+            id="logoutBtn"
+            title="Log out"
+          >
+            ⏻
+          </button>
+        </div>
+      </header>
+
+      <main class="panel">
+        <div class="panel-heading">
+          <span class="panel-title">EVENT LIST</span>
+          <button class="refresh-btn" id="reloadBtn" title="Reload">⟳</button>
+        </div>
+
+        <button class="submit-btn add-btn" id="openAddBtn">+ Add Event</button>
+
+        <div id="adminListState" class="list-state">Loading…</div>
+        <ul class="todo-list admin-list" id="adminList" hidden></ul>
+      </main>
+    </div>
+
+    <!-- ADD / EDIT MODAL -->
+    <div class="modal-overlay" id="eventModal">
+      <div class="modal-card">
+        <button class="modal-close" id="eventModalClose" aria-label="Close">
+          ✕
+        </button>
+        <h2 class="modal-title" id="eventModalTitle">New event</h2>
+        <p class="modal-sub">Fill in the details of your running event.</p>
+
+        <form id="eventForm">
+          <input type="hidden" id="eventId" />
+
+          <label class="field-label" for="iconInput">Icon (emoji)</label>
+          <input
+            type="text"
+            id="iconInput"
+            class="field-input"
+            placeholder="🏃"
+            maxlength="8"
+            required
+          />
+
+          <label class="field-label" for="colorInput">Icon color</label>
+          <input
+            type="color"
+            id="colorInput"
+            class="field-input color-input"
+            value="#4c3ae3"
+          />
+
+          <label class="field-label" for="titleInput">Title</label>
+          <input
+            type="text"
+            id="titleInput"
+            class="field-input"
+            placeholder="Morning Run 5K"
+            maxlength="120"
+            required
+          />
+
+          <label class="field-label" for="descInput">Short description</label>
+          <input
+            type="text"
+            id="descInput"
+            class="field-input"
+            placeholder="Regular training around the block"
+            maxlength="240"
+          />
+
+          <label class="field-label" for="timeInput">Time</label>
+          <input
+            type="text"
+            id="timeInput"
+            class="field-input"
+            placeholder="07:30 AM"
+            maxlength="40"
+          />
+
+          <label class="field-label" for="statusInput">Status</label>
+          <select id="statusInput" class="field-input">
+            <option value="pending">Pending</option>
+            <option value="active">In progress</option>
+            <option value="done">Done</option>
+          </select>
+
+          <button type="submit" class="submit-btn" id="eventSubmitBtn">
+            Save Event
+          </button>
+          <p class="form-status" id="eventFormStatus"></p>
+        </form>
+      </div>
+    </div>
+
+    <!-- DELETE CONFIRM MODAL -->
+    <div class="modal-overlay" id="deleteModal">
+      <div class="modal-card delete-card">
+        <button class="modal-close" id="deleteModalClose" aria-label="Close">
+          ✕
+        </button>
+        <div class="delete-icon">🗑️</div>
+        <h2 class="modal-title">Delete event?</h2>
+        <p class="modal-sub" id="deleteModalText">
+          This will permanently remove this event from your sheet.
+        </p>
+
+        <div class="delete-actions">
+          <button type="button" class="ghost-btn" id="deleteCancelBtn">
+            Cancel
+          </button>
+          <button type="button" class="danger-btn" id="deleteConfirmBtn">
+            Delete
+          </button>
+        </div>
+        <p class="form-status" id="deleteFormStatus"></p>
+      </div>
+    </div>
+
+    <script src="/js/config.js"></script>
+    <script src="/js/admin/admin.js"></script>
+  </body>
+</html>
