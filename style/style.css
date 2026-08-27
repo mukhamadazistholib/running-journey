@@ -42,7 +42,7 @@ body {
 /* ---------- Phone shell ---------- */
 .phone-shell {
   width: 100%;
-  max-width: 430px;
+  max-width: 100vh;
   min-height: 100vh;
   background: var(--card);
   position: relative;
@@ -217,7 +217,7 @@ body {
   position: relative;
   z-index: 2;
   padding: 22px 20px 120px;
-  min-height: 60vh;
+  min-height: 100vh;
 }
 
 .panel-heading {

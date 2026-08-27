@@ -10,7 +10,7 @@
 const CONFIG = {
   // Contoh: "https://script.google.com/macros/s/AKfycb.../exec"
   ENDPOINT_URL:
-    "https://script.google.com/macros/s/AKfycbwTqH6M7fKVECGZpLGGb2VNnoG5B8dS6CLRRq4qU4aGsOh-14NkouUFWHIWqjFh8x0Lnw/exec",
+    "https://script.google.com/macros/s/AKfycbzkmq2mPNDBuCeM6eJHeZFEMftWPB3BSrHRy6PXGjoGKPyIhS77I2tqDp3eCqcW2zaz9Q/exec",
 
   PROFILE: {
     name: "Human",

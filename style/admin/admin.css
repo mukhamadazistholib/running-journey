@@ -1,0 +1,195 @@
+/* Extends the site's real style.css (violet theme) — only admin-specific bits live here */
+
+body {
+  align-items: flex-start;
+  padding-bottom: 40px;
+}
+
+.phone-shell {
+  margin: 0 auto;
+}
+
+.profile-bio-plain {
+  margin: 2px 0 0;
+  font-size: 12.5px;
+  opacity: 0.85;
+}
+
+.admin-header-btn {
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+}
+
+.admin-login-card {
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+.add-btn {
+  margin-bottom: 16px;
+  background: var(--violet-700);
+}
+
+.admin-list .todo-item {
+  position: relative;
+  padding-right: 88px;
+}
+
+.admin-item-actions {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 6px;
+}
+
+.icon-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--violet-100);
+  background: #fff;
+  color: var(--violet-700);
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-btn.danger {
+  color: var(--coral);
+  border-color: #fbe1e1;
+}
+
+.color-input {
+  height: 44px;
+  padding: 4px;
+  cursor: pointer;
+}
+
+.modal-overlay#eventModal .modal-card {
+  max-height: 88vh;
+  overflow-y: auto;
+}
+
+/* ---------- Delete confirm modal ---------- */
+.delete-card {
+  text-align: center;
+}
+
+.delete-icon {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 12px;
+  border-radius: 50%;
+  background: #fdeaea;
+  color: var(--coral);
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#deleteModal .modal-title {
+  margin-bottom: 6px;
+}
+
+#deleteModal .modal-sub {
+  margin-bottom: 20px;
+}
+
+.delete-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.ghost-btn {
+  flex: 1;
+  border: 1.5px solid var(--violet-100);
+  background: #fff;
+  color: var(--ink);
+  padding: 13px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 14.5px;
+  cursor: pointer;
+}
+
+.danger-btn {
+  flex: 1;
+  border: none;
+  background: var(--coral);
+  color: #fff;
+  padding: 13px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 14.5px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.danger-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* ---------- Delete confirmation modal ---------- */
+.delete-card {
+  text-align: center;
+}
+
+.delete-icon {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+  background: #fde8e8;
+  color: var(--coral);
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-card .modal-title {
+  margin-bottom: 6px;
+}
+
+.delete-card .modal-sub {
+  margin-bottom: 22px;
+}
+
+.delete-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.ghost-btn,
+.danger-btn {
+  flex: 1;
+  border: none;
+  padding: 13px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 14.5px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.ghost-btn {
+  background: var(--violet-100);
+  color: var(--violet-700);
+}
+
+.danger-btn {
+  background: var(--coral);
+  color: #fff;
+}
+
+.ghost-btn:disabled,
+.danger-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}

@@ -72,9 +72,23 @@
     if (!CONFIG.ENDPOINT_URL) {
       return MOCK_DATA;
     }
-    const res = await fetch(CONFIG.ENDPOINT_URL, { method: "GET" });
-    if (!res.ok) throw new Error("Failed to fetch data (" + res.status + ")");
-    return res.json();
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 12000);
+    try {
+      const res = await fetch(CONFIG.ENDPOINT_URL, {
+        method: "GET",
+        signal: controller.signal,
+      });
+      if (!res.ok) throw new Error("Failed to fetch data (" + res.status + ")");
+      return await res.json();
+    } catch (err) {
+      if (err.name === "AbortError") {
+        throw new Error("Request timed out after 12s");
+      }
+      throw err;
+    } finally {
+      clearTimeout(timer);
+    }
   }
 
   async function loadAll() {
