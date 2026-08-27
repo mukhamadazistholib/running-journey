@@ -42,6 +42,23 @@
     return sessionStorage.getItem(SESSION_KEY) || "";
   }
 
+  function formatTodoDate(value) {
+    if (!value) return "";
+
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+      return value;
+    }
+
+    return new Intl.DateTimeFormat("en-GB", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }).format(date);
+  }
+
   /* ---------------- Networking helpers ---------------- */
   function callApi(payload, timeoutMs) {
     if (!CONFIG.ENDPOINT_URL) {
@@ -169,7 +186,8 @@
         currentEvents = data.events || [];
         renderEvents();
       })
-      .catch(() => {
+      .catch((err) => {
+        console.error("loadEvents error:", err);
         els.adminListState.textContent =
           "Failed to load data. Try ⟳ to reload.";
       });

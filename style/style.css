@@ -42,7 +42,7 @@ body {
 /* ---------- Phone shell ---------- */
 .phone-shell {
   width: 100%;
-  max-width: 100vh;
+  max-width: 480px;
   min-height: 100vh;
   background: var(--card);
   position: relative;

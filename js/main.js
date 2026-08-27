@@ -47,9 +47,9 @@
       const now = new Date();
 
       const date = now.toLocaleDateString("en-GB", {
-        weekday: "long",
+        weekday: "short",
         day: "2-digit",
-        month: "long",
+        month: "short",
         year: "numeric",
       });
 
