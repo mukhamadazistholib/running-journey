@@ -294,6 +294,11 @@ body {
   border-color: var(--violet-500);
 }
 
+.todo-item.is-canceled {
+  opacity: 0.55;
+  border-color: var(--coral);
+}
+
 .todo-icon {
   width: 44px;
   height: 44px;
@@ -368,6 +373,13 @@ body {
   height: 8px;
   border-radius: 50%;
   background: #fff;
+}
+
+.todo-item.is-canceled .todo-check {
+  background: var(--coral);
+  border-color: var(--coral);
+  color: #fff;
+  font-size: 12px;
 }
 
 /* ---------- Floating Action Button ---------- */

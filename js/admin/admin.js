@@ -262,9 +262,12 @@
       els.titleInput.value = ev.title || "";
       els.descInput.value = ev.description || "";
       els.timeInput.value = ev.time || "";
-      els.statusInput.value = ["pending", "active", "done"].includes(
-        String(ev.status).toLowerCase(),
-      )
+      els.statusInput.value = [
+        "pending",
+        "active",
+        "done",
+        "canceled",
+      ].includes(String(ev.status).toLowerCase())
         ? String(ev.status).toLowerCase()
         : "pending";
     } else {
