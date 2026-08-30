@@ -146,13 +146,18 @@
         status === "done" || status === "true" || status === "Done";
       const isActive =
         status === "active" || status === "ongoing" || status === "berjalan";
+      const isCanceled =
+        status === "canceled" ||
+        status === "cancelled" ||
+        status === "dibatalkan";
       if (isDone) doneCount++;
 
       const li = document.createElement("li");
       li.className =
         "todo-item" +
         (isDone ? " is-done" : "") +
-        (isActive ? " is-active" : "");
+        (isActive ? " is-active" : "") +
+        (isCanceled ? " is-canceled" : "");
 
       const iconBg = ev.color || "#4c3ae3";
       li.innerHTML = `
@@ -162,7 +167,7 @@
           <p class="todo-desc">${escapeHtml(ev.description || "")}</p>
           ${ev.time ? `<p class="todo-time">${escapeHtml(formatTodoDate(ev.time))}</p>` : ""}
         </div>
-        <div class="todo-check">${isDone ? "✓" : ""}</div>
+        <div class="todo-check">${isCanceled ? "✗" : isDone ? "✓" : ""}</div>
       `;
       els.todoList.appendChild(li);
     });
