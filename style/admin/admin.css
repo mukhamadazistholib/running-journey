@@ -1,4 +1,4 @@
-/* Extends the site's real style.css (violet theme) — only admin-specific bits live here */
+/* Extends the site's real style.css (violet theme) - only admin-specific bits live here */
 
 body {
   align-items: flex-start;
@@ -48,7 +48,7 @@ body {
   height: 30px;
   border-radius: 50%;
   border: 1px solid var(--violet-100);
-  background: #fff;
+  background: var(--card);
   color: var(--violet-700);
   font-size: 13px;
   cursor: pointer;
@@ -83,7 +83,7 @@ body {
   height: 52px;
   margin: 0 auto 12px;
   border-radius: 50%;
-  background: #fdeaea;
+  background: var(--danger-bg);
   color: var(--coral);
   font-size: 22px;
   display: flex;
@@ -144,7 +144,7 @@ body {
   height: 52px;
   margin: 0 auto 14px;
   border-radius: 50%;
-  background: #fde8e8;
+  background: var(--danger-bg);
   color: var(--coral);
   font-size: 22px;
   display: flex;

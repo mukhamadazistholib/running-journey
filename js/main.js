@@ -22,10 +22,35 @@
     submitBtn: document.getElementById("submitBtn"),
     formStatus: document.getElementById("formStatus"),
     bubbleLane: document.getElementById("bubbleLane"),
+    themeToggle: document.getElementById("themeToggle"),
+    themeToggleIcon: document.getElementById("themeToggleIcon"),
   };
 
   let cheeringQueue = [];
   let bubbleTimer = null;
+
+  /* ---------------- Theme toggle ---------------- */
+  function applyThemeIcon(theme) {
+    els.themeToggleIcon.textContent = theme === "dark" ? "☀️" : "🌙";
+  }
+
+  function initTheme() {
+    const current =
+      document.documentElement.getAttribute("data-theme") || "light";
+    applyThemeIcon(current);
+
+    els.themeToggle.addEventListener("click", () => {
+      const next =
+        document.documentElement.getAttribute("data-theme") === "dark"
+          ? "light"
+          : "dark";
+      document.documentElement.setAttribute("data-theme", next);
+      try {
+        localStorage.setItem("theme", next);
+      } catch (e) {}
+      applyThemeIcon(next);
+    });
+  }
 
   /* ---------------- Profile & date ---------------- */
   function initProfile() {
@@ -299,6 +324,7 @@
   }
 
   /* ---------------- Init ---------------- */
+  initTheme();
   initProfile();
   loadAll();
 })();
