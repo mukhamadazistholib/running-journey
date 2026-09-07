@@ -36,7 +36,31 @@
     deleteCancelBtn: document.getElementById("deleteCancelBtn"),
     deleteConfirmBtn: document.getElementById("deleteConfirmBtn"),
     deleteFormStatus: document.getElementById("deleteFormStatus"),
+    themeToggle: document.getElementById("themeToggle"),
+    themeToggleIcon: document.getElementById("themeToggleIcon"),
   };
+
+  function applyThemeIcon(theme) {
+    els.themeToggleIcon.textContent = theme === "dark" ? "☀️" : "🌙";
+  }
+
+  function initTheme() {
+    const current =
+      document.documentElement.getAttribute("data-theme") || "light";
+    applyThemeIcon(current);
+
+    els.themeToggle.addEventListener("click", () => {
+      const next =
+        document.documentElement.getAttribute("data-theme") === "dark"
+          ? "light"
+          : "dark";
+      document.documentElement.setAttribute("data-theme", next);
+      try {
+        localStorage.setItem("theme", next);
+      } catch (e) {}
+      applyThemeIcon(next);
+    });
+  }
 
   function getPassword() {
     return sessionStorage.getItem(SESSION_KEY) || "";
@@ -389,5 +413,6 @@
   }
 
   /* ---------------- Init ---------------- */
+  initTheme();
   attemptSession();
 })();

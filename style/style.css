@@ -10,11 +10,42 @@
   --green: #22c55e;
   --amber: #f5a524;
   --coral: #ff6b6b;
+  --danger-bg: #fde8e8;
   --radius-lg: 28px;
   --radius-md: 18px;
   --radius-sm: 12px;
   --font-display: "Sora", sans-serif;
   --font-body: "Inter", sans-serif;
+
+  --field-bg: #fbfaff;
+  --field-border: #e6e4f2;
+  --modal-bg: #ffffff;
+  --bubble-bg: #ffffff;
+  --bubble-border: #ece9f9;
+  --check-border: #dcd9ef;
+  --shell-shadow: rgba(76, 58, 227, 0.08);
+  --card-shadow: rgba(36, 26, 94, 0.06);
+  --overlay-bg: rgba(30, 27, 46, 0.55);
+}
+
+/* ---------- Dark theme ---------- */
+[data-theme="dark"] {
+  --bg: #121020;
+  --ink: #f1eefc;
+  --muted: #9d98bd;
+  --card: #1c1930;
+  --violet-100: #2a2450;
+
+  --field-bg: #221f3a;
+  --field-border: #322c56;
+  --modal-bg: #1c1930;
+  --bubble-bg: #221f3a;
+  --bubble-border: #322c56;
+  --check-border: #3a3460;
+  --shell-shadow: rgba(0, 0, 0, 0.35);
+  --card-shadow: rgba(0, 0, 0, 0.3);
+  --overlay-bg: rgba(0, 0, 0, 0.65);
+  --danger-bg: #45252d;
 }
 
 * {
@@ -29,6 +60,9 @@ body {
   font-family: var(--font-body);
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 body {
@@ -46,7 +80,8 @@ body {
   min-height: 100vh;
   background: var(--card);
   position: relative;
-  box-shadow: 0 0 60px rgba(76, 58, 227, 0.08);
+  box-shadow: 0 0 60px var(--shell-shadow);
+  transition: background-color 0.3s ease;
 }
 
 /* ---------- Header ---------- */
@@ -218,6 +253,7 @@ body {
   z-index: 2;
   padding: 22px 20px 120px;
   min-height: 100vh;
+  transition: background-color 0.3s ease;
 }
 
 .panel-heading {
@@ -279,11 +315,12 @@ body {
   background: var(--card);
   border-radius: var(--radius-md);
   padding: 13px 14px;
-  box-shadow: 0 4px 16px rgba(36, 26, 94, 0.06);
+  box-shadow: 0 4px 16px var(--card-shadow);
   border: 1.5px solid transparent;
   transition:
     border-color 0.2s ease,
-    opacity 0.2s ease;
+    opacity 0.2s ease,
+    background-color 0.3s ease;
 }
 
 .todo-item.is-done {
@@ -348,7 +385,7 @@ body {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  border: 2px solid #dcd9ef;
+  border: 2px solid var(--check-border);
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -411,11 +448,39 @@ body {
   font-size: 16px;
 }
 
+/* ---------- Theme toggle (floating, bottom-right) ---------- */
+.theme-toggle {
+  position: fixed;
+  bottom: 22px;
+  right: 20px;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1.5px solid var(--field-border);
+  background: var(--card);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+  cursor: pointer;
+  box-shadow: 0 8px 20px var(--shell-shadow);
+  z-index: 41;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    transform 0.2s ease;
+}
+
+.theme-toggle:active {
+  transform: scale(0.9);
+}
+
 /* ---------- Modal ---------- */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(30, 27, 46, 0.55);
+  background: var(--overlay-bg);
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -433,11 +498,13 @@ body {
 .modal-card {
   width: 100%;
   max-width: 430px;
-  background: #fff;
+  background: var(--modal-bg);
   border-radius: 24px 24px 0 0;
   padding: 24px 22px 28px;
   transform: translateY(30px);
-  transition: transform 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    background-color 0.3s ease;
   position: relative;
 }
 
@@ -482,14 +549,19 @@ body {
 .field-input,
 .field-textarea {
   width: 100%;
-  border: 1.5px solid #e6e4f2;
+  border: 1.5px solid var(--field-border);
   border-radius: var(--radius-sm);
   padding: 11px 13px;
   font-family: var(--font-body);
   font-size: 14px;
   margin-bottom: 16px;
   resize: none;
-  background: #fbfaff;
+  background: var(--field-bg);
+  color: var(--ink);
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .field-input:focus,
@@ -555,8 +627,8 @@ body {
   position: absolute;
   bottom: -80px;
   max-width: 220px;
-  background: #fff;
-  border: 1px solid #ece9f9;
+  background: var(--bubble-bg);
+  border: 1px solid var(--bubble-border);
   box-shadow: 0 8px 20px rgba(76, 58, 227, 0.12);
   border-radius: 14px 14px 14px 3px;
   padding: 8px 12px;

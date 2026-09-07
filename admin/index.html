@@ -11,6 +11,21 @@
       href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <script>
+      // Apply saved/system theme before first paint to avoid a flash of the wrong theme
+      (function () {
+        try {
+          var saved = localStorage.getItem("theme");
+          var theme =
+            saved ||
+            (window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light");
+          document.documentElement.setAttribute("data-theme", theme);
+        } catch (e) {}
+      })();
+    </script>
     <link rel="stylesheet" href="/style/style.css" />
     <link rel="stylesheet" href="/style/admin/admin.css" />
   </head>
@@ -80,6 +95,15 @@
         <ul class="todo-list admin-list" id="adminList" hidden></ul>
       </main>
     </div>
+
+    <button
+      class="theme-toggle"
+      id="themeToggle"
+      aria-label="Toggle light/dark mode"
+      title="Toggle light/dark mode"
+    >
+      <span class="theme-toggle-icon" id="themeToggleIcon">🌙</span>
+    </button>
 
     <!-- ADD / EDIT MODAL -->
     <div class="modal-overlay" id="eventModal">

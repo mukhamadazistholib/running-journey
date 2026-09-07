@@ -11,6 +11,21 @@
       href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <script>
+      // Apply saved/system theme before first paint to avoid a flash of the wrong theme
+      (function () {
+        try {
+          var saved = localStorage.getItem("theme");
+          var theme =
+            saved ||
+            (window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light");
+          document.documentElement.setAttribute("data-theme", theme);
+        } catch (e) {}
+      })();
+    </script>
     <link rel="stylesheet" href="style/style.css" />
   </head>
   <body>
@@ -71,6 +86,16 @@
     <button class="fab" id="fabBtn">
       <span class="fab-icon">💛</span>
       <span class="fab-text">Kind of Words!</span>
+    </button>
+
+    <!-- THEME TOGGLE (floating, bottom-right) -->
+    <button
+      class="theme-toggle"
+      id="themeToggle"
+      aria-label="Toggle light/dark mode"
+      title="Toggle light/dark mode"
+    >
+      <span class="theme-toggle-icon" id="themeToggleIcon">🌙</span>
     </button>
 
     <!-- MODAL -->
