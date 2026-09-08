@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="id">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,6 +11,7 @@
       href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="style/style.css" />
     <script>
       // Apply saved/system theme before first paint to avoid a flash of the wrong theme
       (function () {
@@ -26,7 +27,6 @@
         } catch (e) {}
       })();
     </script>
-    <link rel="stylesheet" href="style/style.css" />
   </head>
   <body>
     <!-- Bubble stream layer (semangat messages floating up) -->
@@ -41,10 +41,10 @@
               id="profilePhoto"
               class="profile-photo"
               src="https://api.dicebear.com/7.x/notionists/svg?seed=Runner"
-              alt="Foto profil"
+              alt="Profile photo"
             />
             <div class="profile-text">
-              <p class="greeting" id="greeting">Selamat pagi</p>
+              <p class="greeting" id="greeting">Morning</p>
               <h1 class="profile-name" id="profileName">Runner</h1>
               <div class="profile-bio">
                 <span class="profile-bio-text" id="profileBio"></span>
@@ -67,15 +67,26 @@
           </div>
           <span class="progress-label" id="progressLabel">0 / 0 Done</span>
         </div>
+
+        <p class="countdown-badge" id="countdownBadge" hidden></p>
       </header>
 
       <!-- TODO PANEL -->
       <main class="panel">
         <div class="panel-heading">
           <span class="panel-title">RUNNING EVENT LIST</span>
-          <button class="refresh-btn" id="refreshBtn" title="Muat ulang">
-            ⟳
-          </button>
+          <div class="panel-actions">
+            <button class="icon-btn" id="statsBtn" title="Stats & progress">
+              📊
+            </button>
+            <button
+              class="icon-btn refresh-btn"
+              id="refreshBtn"
+              title="Refresh"
+            >
+              ⟳
+            </button>
+          </div>
         </div>
         <div id="listState" class="list-state">Loading..</div>
         <ul class="todo-list" id="todoList" hidden></ul>
@@ -135,6 +146,25 @@
           </button>
           <p class="form-status" id="formStatus"></p>
         </form>
+      </div>
+    </div>
+
+    <!-- STATS MODAL -->
+    <div class="modal-overlay" id="statsOverlay">
+      <div class="modal-card">
+        <button class="modal-close" id="statsClose" aria-label="Close">
+          ✕
+        </button>
+        <h2 class="modal-title">Stats & Progress 📊</h2>
+        <p class="modal-sub">A recap of your running journey so far.</p>
+
+        <div class="stats-grid" id="statsGrid"></div>
+        <div class="badges-row" id="badgesRow"></div>
+
+        <button type="button" class="submit-btn" id="shareBtn">
+          Share Progress 📤
+        </button>
+        <p class="form-status" id="shareStatus"></p>
       </div>
     </div>
 
