@@ -29,7 +29,7 @@
     </script>
   </head>
   <body>
-    <!-- Bubble stream layer (semangat messages floating up) -->
+    <!-- Bubble stream layer (encouragement messages floating up) -->
     <div id="bubbleLane" class="bubble-lane" aria-hidden="true"></div>
 
     <div class="phone-shell">
@@ -44,7 +44,7 @@
               alt="Profile photo"
             />
             <div class="profile-text">
-              <p class="greeting" id="greeting">Morning</p>
+              <p class="greeting" id="greeting">Good morning</p>
               <h1 class="profile-name" id="profileName">Runner</h1>
               <div class="profile-bio">
                 <span class="profile-bio-text" id="profileBio"></span>
@@ -68,7 +68,7 @@
           <span class="progress-label" id="progressLabel">0 / 0 Done</span>
         </div>
 
-        <p class="countdown-badge" id="countdownBadge" hidden></p>
+        <button type="button" class="countdown-badge" id="countdownBadge" hidden></button>
       </header>
 
       <!-- TODO PANEL -->
@@ -76,14 +76,10 @@
         <div class="panel-heading">
           <span class="panel-title">RUNNING EVENT LIST</span>
           <div class="panel-actions">
-            <button class="icon-btn" id="statsBtn" title="Stats & progress">
+            <button class="icon-btn" id="statsBtn" title="Statistics & progress">
               📊
             </button>
-            <button
-              class="icon-btn refresh-btn"
-              id="refreshBtn"
-              title="Refresh"
-            >
+            <button class="icon-btn refresh-btn" id="refreshBtn" title="Refresh">
               ⟳
             </button>
           </div>
@@ -119,7 +115,7 @@
         <p class="modal-sub">
           A few kind words can make every step feel a little lighter.
         </p>
-        <form id="semangatForm">
+        <form id="encouragementForm">
           <label class="field-label" for="nameInput">
             Your Name (optional)
           </label>
@@ -155,8 +151,8 @@
         <button class="modal-close" id="statsClose" aria-label="Close">
           ✕
         </button>
-        <h2 class="modal-title">Stats & Progress 📊</h2>
-        <p class="modal-sub">A recap of your running journey so far.</p>
+        <h2 class="modal-title">Statistics & Progress 📊</h2>
+        <p class="modal-sub">Your running journey summary so far.</p>
 
         <div class="stats-grid" id="statsGrid"></div>
         <div class="badges-row" id="badgesRow"></div>
@@ -165,6 +161,24 @@
           Share Progress 📤
         </button>
         <p class="form-status" id="shareStatus"></p>
+      </div>
+    </div>
+
+    <!-- NEXT EVENT MODAL -->
+    <div class="modal-overlay" id="nextEventOverlay">
+      <div class="modal-card">
+        <button class="modal-close" id="nextEventClose" aria-label="Close">
+          ✕
+        </button>
+        <h2 class="modal-title">Next Event 🏁</h2>
+        <p class="modal-sub">Details of your nearest running event.</p>
+
+        <div class="next-event-card" id="nextEventCard"></div>
+
+        <button type="button" class="submit-btn" id="nextEventShareBtn">
+          Share as Image 📤
+        </button>
+        <p class="form-status" id="nextEventShareStatus"></p>
       </div>
     </div>
 

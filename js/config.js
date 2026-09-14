@@ -1,14 +1,14 @@
 /* =========================================================
-   KONFIGURASI
+   CONFIGURATION
    =========================================================
-   1. Deploy file apps-script/Code.gs sebagai Web App
-      (lihat README.md untuk langkah lengkapnya).
-   2. Tempel URL Web App yang kamu dapat ke bawah ini.
-   3. Kosongkan ('') kalau mau lihat dulu tampilannya pakai
-      data contoh (mock data) tanpa Google Sheet.
+   1. Deploy the apps-script/Code.gs file as a Web App
+      (see README.md for the full setup steps).
+   2. Paste the Web App URL you get below.
+   3. Leave it empty ('') if you want to preview the interface
+      using example mock data without a Google Sheet.
 ========================================================= */
 const CONFIG = {
-  // Contoh: "https://script.google.com/macros/s/AKfycb.../exec"
+ // Example: "https://script.google.com/macros/s/AKfycb.../exec"
   ENDPOINT_URL:
     "https://script.google.com/macros/s/AKfycbzkmq2mPNDBuCeM6eJHeZFEMftWPB3BSrHRy6PXGjoGKPyIhS77I2tqDp3eCqcW2zaz9Q/exec",
 
@@ -18,14 +18,14 @@ const CONFIG = {
     photo: "https://api.dicebear.com/7.x/notionists/svg?seed=Pathum",
   },
 
-  // Berapa detik jeda antar bubble semangat muncul
+ // Number of milliseconds between each encouragement bubble appears
   BUBBLE_INTERVAL_MS: 3500,
 
-  // Berapa lama animasi 1 bubble melayang dari bawah ke atas (detik)
+ // How long each bubble animation lasts from bottom to top (seconds)
   BUBBLE_DURATION_S: 12,
 };
 
-/* Data contoh — dipakai otomatis kalau ENDPOINT_URL masih kosong */
+/* Example data — automatically used when ENDPOINT_URL is empty */
 const MOCK_DATA = {
   events: [
     {
@@ -33,7 +33,7 @@ const MOCK_DATA = {
       icon: "🏃",
       color: "#4c3ae3",
       title: "Morning Run 5K",
-      description: "Latihan rutin sekitar komplek",
+     description: "Routine training around the neighborhood",
       time: "07:30 AM",
       status: "done",
     },
@@ -42,7 +42,7 @@ const MOCK_DATA = {
       icon: "🎽",
       color: "#f5a524",
       title: "On-Air Radio App Design",
-      description: "Desain UI untuk halaman event lari",
+     description: "UI design for the running event page",
       time: "08:00 AM",
       status: "active",
     },
@@ -50,8 +50,8 @@ const MOCK_DATA = {
       id: 3,
       icon: "📩",
       color: "#22c55e",
-      title: "Balas Email Panitia",
-      description: "Konfirmasi race pack half marathon",
+     title: "Reply to Event Committee Email",
+     description: "Confirm the half marathon race pack",
       time: "10:30 AM",
       status: "pending",
     },
@@ -59,8 +59,8 @@ const MOCK_DATA = {
       id: 4,
       icon: "💧",
       color: "#3b82f6",
-      title: "Bayar Tagihan Registrasi",
-      description: "Lunasi biaya pendaftaran lomba",
+     title: "Pay Registration Fee",
+     description: "Settle the race registration cost",
       time: "11:30 AM",
       status: "pending",
     },
@@ -68,8 +68,8 @@ const MOCK_DATA = {
       id: 5,
       icon: "🎨",
       color: "#f5a524",
-      title: "Desain 'Daily UI'",
-      description: "Ubah rute run map minggu ini",
+     title: "Design 'Daily UI'",
+     description: "Update this week's run route map",
       time: "03:00 PM",
       status: "pending",
     },
@@ -77,15 +77,15 @@ const MOCK_DATA = {
       id: 6,
       icon: "📦",
       color: "#ec4899",
-      title: "Kirim File Proyek",
-      description: "Upload hasil recap lari ke tim",
+     title: "Send Project File",
+     description: "Upload the running recap results to the team",
       time: "05:00 PM",
       status: "pending",
     },
   ],
   semangat: [
-    { name: "Dinda", message: "Semangat lari nya kak! 🔥" },
-    { name: "Anonym", message: "Sedikit lagi finish line, gaskeun!" },
-    { name: "Bagas", message: "PR minggu ini pasti pecah 💪" },
+   { name: "Dinda", message: "Keep pushing, big sis! 🔥" },
+   { name: "Anonymous", message: "Almost at the finish line, let's go!" },
+   { name: "Bagas", message: "This week's PR is definitely going to break 💪" },
   ],
 };

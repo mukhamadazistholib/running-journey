@@ -17,7 +17,7 @@
     fabBtn: document.getElementById("fabBtn"),
     modalOverlay: document.getElementById("modalOverlay"),
     modalClose: document.getElementById("modalClose"),
-    semangatForm: document.getElementById("semangatForm"),
+    encouragementForm: document.getElementById("encouragementForm"),
     nameInput: document.getElementById("nameInput"),
     msgInput: document.getElementById("msgInput"),
     charCount: document.getElementById("charCount"),
@@ -32,11 +32,17 @@
     badgesRow: document.getElementById("badgesRow"),
     shareBtn: document.getElementById("shareBtn"),
     shareStatus: document.getElementById("shareStatus"),
+    nextEventOverlay: document.getElementById("nextEventOverlay"),
+    nextEventClose: document.getElementById("nextEventClose"),
+    nextEventCard: document.getElementById("nextEventCard"),
+    nextEventShareBtn: document.getElementById("nextEventShareBtn"),
+    nextEventShareStatus: document.getElementById("nextEventShareStatus"),
   };
 
   let cheeringQueue = [];
   let bubbleTimer = null;
-  let lastEvents = []; // Last successfully loaded events, used for stats/countdown/share
+  let lastEvents = []; // last successfully loaded events, used for stats/countdown/share
+  let nextEvent = null; // { ev, date, diff } for the nearest upcoming event
 
   const REMINDER_KEY = "runReminders"; // { [eventKey]: { notified: bool } }
   const BADGE_MILESTONES = [
@@ -146,14 +152,15 @@
       startBubbleStream(data.semangat || []);
     } catch (err) {
       els.listState.textContent =
-        "Failed to fetch the data. Try refreshing ⟳ to try again.";
+        "Failed to fetch the data. Try refreshing ⟳ and try again.";
       console.error(err);
     }
   }
 
   /* ---------------- Sorting ---------------- */
   function sortEventsByDate(events) {
-    // Sort valid dates first, nearest event first; keep undated events in their original order.
+    // Events with valid dates are sorted ascending (closest first);
+    // events without parseable dates are moved to the end, preserving their original order.
     return events
       .map((ev, index) => ({ ev, index, date: parseEventDate(ev) }))
       .sort((a, b) => {
@@ -168,15 +175,26 @@
   /* ---------------- Status & date helpers ---------------- */
   function classifyStatus(ev) {
     const status = String(ev.status || "pending").toLowerCase();
-    return {
-      isDone: status === "done" || status === "true",
-      isActive:
-        status === "active" || status === "ongoing" || status === "berjalan",
-      isCanceled:
-        status === "canceled" ||
-        status === "cancelled" ||
-        status === "dibatalkan",
-    };
+
+    const isCanceled =
+      status === "canceled" ||
+      status === "cancelled" ||
+      status === "cancelled";
+
+    const explicitlyDone = status === "done" || status === "true";
+
+    // Events whose date has already passed are automatically treated as "done",
+    // unless they were explicitly marked as canceled in the sheet.
+    const date = parseEventDate(ev);
+    const isBackdated = Boolean(date) && daysUntil(date) < 0;
+
+    const isDone = !isCanceled && (explicitlyDone || isBackdated);
+    const isActive =
+      !isDone &&
+      !isCanceled &&
+      (status === "active" || status === "ongoing" || status === "in_progress");
+
+    return { isDone, isActive, isCanceled };
   }
 
   function parseEventDate(ev) {
@@ -214,7 +232,7 @@
     if (!events.length) {
       els.listState.hidden = false;
       els.listState.textContent =
-        "No events yet. Add them through your Google Sheet.";
+        "No events yet. Add them via your Google Sheet.";
       els.todoList.hidden = true;
       return;
     }
@@ -246,13 +264,13 @@
       const isArmed = Boolean(reminders[key]);
 
       const bellHtml = canRemind
-        ? `<button type="button" class="todo-bell${isArmed ? " is-active" : ""}" data-key="${encodeURIComponent(key)}" title="Remind me one day before">🔔</button>`
+        ? `<button type="button" class="todo-bell${isArmed ? " is-active" : ""}" data-key="${encodeURIComponent(key)}" title="Remind me 1 day before">🔔</button>`
         : "";
 
       li.innerHTML = `
         <div class="todo-icon" style="background:${escapeAttr(iconBg)}">${escapeHtml(ev.icon || "🏁")}</div>
         <div class="todo-body">
-          <p class="todo-title">${escapeHtml(ev.title || "Tanpa judul")}</p>
+          <p class="todo-title">${escapeHtml(ev.title || "Untitled")}</p>
           <p class="todo-desc">${escapeHtml(ev.description || "")}</p>
           ${ev.time ? `<p class="todo-time">${escapeHtml(formatTodoDate(ev.time))}</p>` : ""}
         </div>
@@ -293,6 +311,7 @@
       .sort((a, b) => a.date - b.date);
 
     if (!upcoming.length) {
+      nextEvent = null;
       els.countdownBadge.hidden = true;
       return;
     }
@@ -301,11 +320,191 @@
     const diff = daysUntil(date);
     const label = diff === 0 ? "Today!" : `D-${diff}`;
 
+    nextEvent = { ev, date, diff };
     els.countdownBadge.hidden = false;
     els.countdownBadge.textContent = `⏳ ${ev.title || "Event"} · ${label}`;
   }
 
-  /* ---------------- One-day browser reminder ---------------- */
+  /* ---------------- Next Event modal ---------------- */
+  function openNextEventModal() {
+    if (!nextEvent) return;
+
+    const { ev, diff } = nextEvent;
+    const label = diff === 0 ? "TODAY" : `D-${diff}`;
+
+    els.nextEventCard.innerHTML = `
+      <div class="next-event-icon" style="background:${escapeAttr(ev.color || "#4c3ae3")}">${escapeHtml(ev.icon || "🏁")}</div>
+      <div class="next-event-info">
+        <p class="next-event-title">${escapeHtml(ev.title || "Event")}</p>
+        <p class="next-event-date">${escapeHtml(formatTodoDate(ev.time))}</p>
+        <span class="next-event-countdown">${label}</span>
+      </div>
+    `;
+
+    els.nextEventShareStatus.textContent = "";
+    els.nextEventShareStatus.className = "form-status";
+    els.nextEventOverlay.classList.add("is-open");
+  }
+
+  function closeNextEventModal() {
+    els.nextEventOverlay.classList.remove("is-open");
+  }
+
+  els.countdownBadge.addEventListener("click", openNextEventModal);
+  els.nextEventClose.addEventListener("click", closeNextEventModal);
+  els.nextEventOverlay.addEventListener("click", (e) => {
+    if (e.target === els.nextEventOverlay) closeNextEventModal();
+  });
+
+  /* ---------------- Share next event (as a PNG image) ---------------- */
+  async function generateNextEventImage(entry) {
+    if (document.fonts && document.fonts.ready) {
+      try {
+        await document.fonts.ready;
+      } catch (e) {}
+    }
+
+    const { ev, diff } = entry;
+    const W = 1080;
+    const H = 1350;
+    const canvas = document.createElement("canvas");
+    canvas.width = W;
+    canvas.height = H;
+    const ctx = canvas.getContext("2d");
+
+    // Background gradient (same violet brand gradient as the header)
+    const bgGrad = ctx.createLinearGradient(0, 0, W, H);
+    bgGrad.addColorStop(0, "#6c4cf5");
+    bgGrad.addColorStop(0.55, "#4c3ae3");
+    bgGrad.addColorStop(1, "#241a5e");
+    ctx.fillStyle = bgGrad;
+    ctx.fillRect(0, 0, W, H);
+
+    // Subtle diagonal lane-line pattern
+    ctx.save();
+    ctx.globalAlpha = 0.08;
+    ctx.strokeStyle = "#ffffff";
+    ctx.lineWidth = 5;
+    for (let x = -H; x < W + H; x += 46) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x + H, H);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    ctx.textAlign = "center";
+
+    // Eyebrow label
+    ctx.fillStyle = "rgba(255,255,255,0.75)";
+    ctx.font = "600 30px Inter, sans-serif";
+    ctx.fillText("UPCOMING RUN", W / 2, 150);
+
+    // Event icon badge
+    const iconSize = 150;
+    const iconX = W / 2 - iconSize / 2;
+    const iconY = 220;
+    ctx.fillStyle = ev.color || "#ffffff";
+    drawRoundedRect(ctx, iconX, iconY, iconSize, iconSize, 40);
+    ctx.fill();
+    ctx.font = "70px serif"; // font generik, cukup buat render emoji
+    ctx.fillText(ev.icon || "🏁", W / 2, iconY + iconSize / 2 + 25);
+
+    // Event title (wrap if it is too long)
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "800 58px Sora, sans-serif";
+    wrapCanvasText(ctx, ev.title || "Running Event", W / 2, 480, W - 140, 68);
+
+    // Date
+    ctx.font = "600 32px Inter, sans-serif";
+    ctx.fillStyle = "rgba(255,255,255,0.85)";
+    ctx.fillText(formatTodoDate(ev.time), W / 2, 590);
+
+    // Big countdown
+    const countdownText = diff === 0 ? "TODAY" : `D-${diff}`;
+    ctx.font = "800 240px Sora, sans-serif";
+    ctx.fillStyle = "#ffffff";
+    ctx.fillText(countdownText, W / 2, 900);
+
+    ctx.font = "600 34px Inter, sans-serif";
+    ctx.fillStyle = "rgba(255,255,255,0.85)";
+    ctx.fillText(
+      diff === 0 ? "The race is today!" : "days to go — get ready!",
+      W / 2,
+      960,
+    );
+
+    // Description, if available
+    if (ev.description) {
+      ctx.font = "500 28px Inter, sans-serif";
+      ctx.fillStyle = "rgba(255,255,255,0.7)";
+      wrapCanvasText(ctx, ev.description, W / 2, 1050, W - 200, 38, 2);
+    }
+
+    // Footer watermark
+    ctx.font = "500 28px Inter, sans-serif";
+    ctx.fillStyle = "rgba(255,255,255,0.6)";
+    ctx.fillText("milesandsmiles.space", W / 2, H - 60);
+
+    return new Promise((resolve) => {
+      canvas.toBlob((blob) => resolve(blob), "image/png", 0.95);
+    });
+  }
+
+  els.nextEventShareBtn.addEventListener("click", async () => {
+    if (!nextEvent) return;
+
+    els.nextEventShareStatus.textContent = "";
+    els.nextEventShareStatus.className = "form-status";
+    els.nextEventShareBtn.disabled = true;
+    const originalLabel = els.nextEventShareBtn.textContent;
+    els.nextEventShareBtn.textContent = "Preparing image..";
+
+    try {
+      const blob = await generateNextEventImage(nextEvent);
+      if (!blob) throw new Error("Canvas produced no image data");
+
+      const { ev, diff } = nextEvent;
+      const caption =
+        diff === 0
+          ? `${ev.title} is happening today! 🏁`
+          : `${ev.title} is coming up in ${diff} day${diff === 1 ? "" : "s"}! 🏃`;
+      const file = new File([blob], "next-run-event.png", {
+        type: "image/png",
+      });
+
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: "Running Journey",
+          text: caption,
+        });
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "next-run-event.png";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        els.nextEventShareStatus.textContent =
+          "Image downloaded — share it from your gallery!";
+        els.nextEventShareStatus.classList.add("ok");
+      }
+    } catch (err) {
+      if (err && err.name === "AbortError") return; // user closed the share sheet
+      console.error(err);
+      els.nextEventShareStatus.textContent =
+        "Couldn't generate the image. Try again?";
+      els.nextEventShareStatus.classList.add("err");
+    } finally {
+      els.nextEventShareBtn.disabled = false;
+      els.nextEventShareBtn.textContent = originalLabel;
+    }
+  });
+
+  /* ---------------- Reminder D-1 (browser notifications) ---------------- */
   function loadReminders() {
     try {
       return JSON.parse(localStorage.getItem(REMINDER_KEY) || "{}");
@@ -349,7 +548,7 @@
       });
     } else {
       alert(
-        "Notifications are blocked. Enable them in your browser settings first.",
+        "Notification permission is blocked. Please enable it in your browser settings first.",
       );
     }
   }
@@ -377,7 +576,7 @@
       if (now >= remindAt && now < date.getTime()) {
         try {
           new Notification("Event tomorrow: " + (ev.title || "Running event"), {
-            body: ev.description || "Do not forget to get ready! 🏃",
+            body: ev.description || "Don't forget to get ready! 🏃",
             icon: "/assets/emoji-trophy.ico",
           });
         } catch (e) {}
@@ -389,7 +588,7 @@
     if (changed) saveReminders(reminders);
   }
 
-  /* ---------------- Stats & badges ---------------- */
+  /* ---------------- Statistik & badge ---------------- */
   function computeStats(events) {
     const total = events.length;
     let done = 0,
@@ -642,8 +841,8 @@
   });
 
   /* ---------------- Bubble stream (encouragement) ---------------- */
-  function startBubbleStream(semangatList) {
-    cheeringQueue = (semangatList || []).slice(-40); // Keep the stream manageable
+  function startBubbleStream(encouragementList) {
+    cheeringQueue = (encouragementList || []).slice(-40); // limit to avoid too many
     if (bubbleTimer) clearInterval(bubbleTimer);
     if (!cheeringQueue.length) return;
 
@@ -662,7 +861,7 @@
     const bubble = document.createElement("div");
     bubble.className = "bubble";
 
-    const leftPct = 6 + Math.random() * 60; // Random horizontal position
+    const leftPct = 6 + Math.random() * 60; // random horizontal position
     const drift = (Math.random() * 60 - 30).toFixed(0) + "px";
     const duration =
       (CONFIG.BUBBLE_DURATION_S || 12) + (Math.random() * 3 - 1.5);
@@ -672,7 +871,7 @@
     bubble.style.animationDuration = duration + "s";
 
     bubble.innerHTML = `
-      <span class="bubble-name">${escapeHtml(item.name || "Anonym")}</span>
+      <span class="bubble-name">${escapeHtml(item.name || "Anonymous")}</span>
       <span class="bubble-msg">${escapeHtml(item.message || "")}</span>
     `;
 
@@ -680,7 +879,7 @@
     bubble.addEventListener("animationend", () => bubble.remove());
   }
 
-  /* ---------------- Encouragement modal & form ---------------- */
+  /* ---------------- Modal & form (encouragement) ---------------- */
   function openModal() {
     els.modalOverlay.classList.add("is-open");
   }
@@ -700,11 +899,11 @@
     els.charCount.textContent = els.msgInput.value.length;
   });
 
-  els.semangatForm.addEventListener("submit", async (e) => {
+  els.encouragementForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const message = els.msgInput.value.trim();
     if (!message) return;
-    const name = els.nameInput.value.trim() || "Anonym";
+    const name = els.nameInput.value.trim() || "Anonymous";
 
     els.submitBtn.disabled = true;
     els.submitBtn.textContent = "Sending..";
@@ -715,7 +914,7 @@
 
     try {
       if (CONFIG.ENDPOINT_URL) {
-        // text/plain menghindari CORS preflight yang tidak didukung Apps Script
+        // text/plain avoids CORS preflight, which Apps Script does not support
         const res = await fetch(CONFIG.ENDPOINT_URL, {
           method: "POST",
           headers: { "Content-Type": "text/plain;charset=utf-8" },
@@ -724,17 +923,17 @@
         if (!res.ok)
           throw new Error("Whoops, something went wrong (" + res.status + ")");
       } else {
-        MOCK_DATA.semangat.push(payload); // Local demo mode
+        MOCK_DATA.semangat.push(payload); // local demo mode
       }
 
-      // Show the bubble immediately without waiting for a refetch
+      // show the bubble immediately without waiting for a refetch
       cheeringQueue.push(payload);
       spawnBubble(payload);
 
       els.formStatus.textContent =
         "Yay, it's sent! Thanks for cheering them on 💛";
       els.formStatus.classList.add("ok");
-      els.semangatForm.reset();
+      els.encouragementForm.reset();
       els.charCount.textContent = "0";
       setTimeout(closeModal, 1200);
     } catch (err) {
@@ -759,6 +958,39 @@
   }
   function escapeAttr(str) {
     return String(str).replace(/[^#a-zA-Z0-9(),.%\s-]/g, "");
+  }
+
+  // Simple word wrapping for text inside <canvas> (fillText does not wrap automatically).
+  // If maxLines is omitted, there is no limit; if set, the last line ends with "…".
+  function wrapCanvasText(ctx, text, x, y, maxWidth, lineHeight, maxLines) {
+    const words = String(text).split(/\s+/);
+    let line = "";
+    let curY = y;
+    const lines = [];
+
+    words.forEach((word) => {
+      const testLine = line ? line + " " + word : word;
+      if (ctx.measureText(testLine).width > maxWidth && line) {
+        lines.push(line);
+        line = word;
+      } else {
+        line = testLine;
+      }
+    });
+    if (line) lines.push(line);
+
+    const limited = maxLines ? lines.slice(0, maxLines) : lines;
+    if (maxLines && lines.length > maxLines) {
+      limited[limited.length - 1] = limited[limited.length - 1].replace(
+        /\s*$/,
+        "",
+      ) + "…";
+    }
+
+    limited.forEach((l) => {
+      ctx.fillText(l, x, curY);
+      curY += lineHeight;
+    });
   }
 
   /* ---------------- Init ---------------- */

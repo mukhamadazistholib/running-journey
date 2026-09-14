@@ -256,6 +256,19 @@ body {
   border-radius: 999px;
   font-size: 11.5px;
   font-weight: 600;
+  font-family: inherit;
+  color: #ffffff;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.15s ease;
+}
+
+.countdown-badge:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+.countdown-badge:active {
+  transform: scale(0.97);
 }
 
 .countdown-badge[hidden] {
@@ -726,7 +739,58 @@ body {
   filter: grayscale(1);
 }
 
-/* ---------- Bubble lane (semangat messages) ---------- */
+/* ---------- Next event modal ---------- */
+.next-event-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--field-bg);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.next-event-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+  color: #fff;
+}
+
+.next-event-info {
+  min-width: 0;
+}
+
+.next-event-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15.5px;
+  margin: 0 0 3px;
+}
+
+.next-event-date {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin: 0 0 3px;
+}
+
+.next-event-countdown {
+  display: inline-block;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--violet-700);
+  background: var(--violet-100);
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+/* ---------- Bubble lane (encouragement messages) ---------- */
 .bubble-lane {
   position: fixed;
   inset: 0;
