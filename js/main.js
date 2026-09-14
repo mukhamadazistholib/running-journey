@@ -429,7 +429,7 @@
     ctx.font = "600 34px Inter, sans-serif";
     ctx.fillStyle = "rgba(255,255,255,0.85)";
     ctx.fillText(
-      diff === 0 ? "The race is today!" : "days to go — get ready!",
+      diff === 0 ? "The race is today!" : "days to go, get ready!",
       W / 2,
       960,
     );
